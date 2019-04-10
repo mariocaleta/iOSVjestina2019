@@ -59,17 +59,20 @@ class InitialViewController: UIViewController {
                     quizImageService.fetchQuizImage(quizImage: quizImage!) { (image) in
                         DispatchQueue.main.async {
                             self.quizImageView.image = image
+                            print("image set")
+                            self.quizCategoryLabel.backgroundColor = labelColor
+                            self.quizCategoryLabel.text = responseModel.quizzes![0].title
+                            }
                         }
-                        print("image set")
-                        self.quizCategoryLabel.backgroundColor = labelColor
-                        self.quizCategoryLabel.text = responseModel.quizzes![0].title
                     }
-                }
                     else {
                         self.quizImageView.backgroundColor = labelColor
                         self.quizCategoryLabel.backgroundColor = labelColor
                         self.quizCategoryLabel.text = responseModel.quizzes![0].title
                     }
+                    
+                    self.addQuestionCustomView(quiz: responseModel)
+                    
                 }
                 else{
                     self.hiddenLabel.isHidden = false
@@ -77,6 +80,13 @@ class InitialViewController: UIViewController {
             }
             
         }
+    }
+    
+    func addQuestionCustomView(quiz: Quiz) {
+        
+        let questionView = QuestionView(frame: CGRect(origin: CGPoint(x: 10, y: 10), size: CGSize(width: 500, height: 500)), quiz: quiz)
+        questionCustomView.addSubview(questionView)
+        
     }
     
     override func viewDidLoad() {
