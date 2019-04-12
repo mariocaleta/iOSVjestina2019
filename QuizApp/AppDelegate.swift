@@ -19,9 +19,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         window = UIWindow(frame: UIScreen.main.bounds)
         
-        let vc = InitialViewController()
+        let logInViewController = LogInViewController()
+        let initialViewController = InitialViewController()
+        let userDefaults = UserDefaults.standard
+        let accessToken = userDefaults.string(forKey: "accessToken")
         
-        window?.rootViewController = vc
+        if (accessToken == nil){
+            window?.rootViewController = logInViewController
+        }
+        else{
+            window?.rootViewController = initialViewController
+        }
         
         window?.makeKeyAndVisible()
         

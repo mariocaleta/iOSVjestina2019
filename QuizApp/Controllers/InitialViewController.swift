@@ -18,6 +18,18 @@ class InitialViewController: UIViewController {
     @IBOutlet weak var quizImageView: UIImageView!
     @IBOutlet weak var questionCustomView: UIView!
     
+    @IBAction func signOutButtonTapped(_ sender: UIButton) {
+        let userDefaults = UserDefaults.standard
+        userDefaults.removeObject(forKey: "accessToken")
+        
+        let accessToken = userDefaults.string(forKey: "accessToken")
+        
+        if (accessToken == nil){
+            let vc = LogInViewController(nibName: "LogInViewController", bundle: nil)
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
+    
     @IBAction func buttonTapped(_ sender: UIButton) {
         
         fetchQuiz()
