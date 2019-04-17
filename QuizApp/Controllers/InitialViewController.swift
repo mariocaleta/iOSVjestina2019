@@ -46,6 +46,12 @@ class InitialViewController: UIViewController {
                     //let nbaCount = responseModel.quizzes!.filter{$0[Questions["question"]].contains("NBA")}
                     var nbaCount = 0
                     
+                    let count = responseModel.quizzes!.map {
+                        $0.questions?.filter{
+                            $0.question?.contains("NBA") ?? false
+                        }.count ?? 0
+                        }.reduce(0) {$0 + $1}
+                    
                     for i in 0..<responseModel.quizzes!.count {
                         for j in 0..<responseModel.quizzes![i].questions!.count{
                             if((responseModel.quizzes![i].questions![j].question?.contains("NBA"))!){
@@ -54,7 +60,7 @@ class InitialViewController: UIViewController {
                         }
                     }
                     
-                    self.funFactLabel.text = "Fun fact: There is \(nbaCount) NBA questions!"
+                    self.funFactLabel.text = "Fun fact: There is \(count) NBA questions!"
                     self.dohvatiButton.isHidden = true
                     
                     let quizImage = responseModel.quizzes![0].image
