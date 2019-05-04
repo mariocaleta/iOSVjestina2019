@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 
 class LogInService {
     
@@ -34,12 +35,30 @@ class LogInService {
             
         let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
             do{
+                if let err = error as? URLError, err.code  == URLError.Code.notConnectedToInternet
+                {
+                    print("There is no internet connection!")
+                //    let alertController = UIAlertController(title: "Alert", message: "There is no internet connection!", preferredStyle: .alert)
+              //      alertController.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
+                    
+       //             let alertWindow = UIWindow(frame: UIScreen.main.bounds)
+       //             alertWindow.rootViewController = UIViewController()
+       //             alertWindow.windowLevel = UIWindow.Level.alert + 1;
+       //             alertWindow.makeKeyAndVisible()
+       //             alertWindow.rootViewController?.present(alertController, animated: true, completion: nil)
+                }
+                
                 let json = try JSONSerialization.jsonObject(with: data!, options: .mutableContainers) as? NSDictionary
                 if let parseJSON = json {
                     let accessToken = parseJSON["token"] as? String
-                    if (accessToken == nil)
+                    let id = parseJSON["user_id"] as? Int
+                    if (accessToken == nil || id == nil)
                     {
                         completion(nil)
+                    }else{
+                        let userDefaults = UserDefaults.standard
+                        userDefaults.set(accessToken, forKey: "accessToken")
+                        userDefaults.set(id, forKey: "id")
                     }
                    // print("acess token je: \(String(describing: accessToken!))")
                     completion(accessToken)

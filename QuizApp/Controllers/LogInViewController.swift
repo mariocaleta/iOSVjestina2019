@@ -27,16 +27,17 @@ class LogInViewController: UIViewController {
         
         let logInService = LogInService()
         logInService.fetchAccessToken(username: userNameTextField.text!, password: passwordTextField.text!){
-            (acessToken) in
+            (accessToken) in
             DispatchQueue.main.async {
                 self.removeActivityIndicator(activityIndicator: myActivityIndicator)
-                if acessToken == nil{
+                if accessToken == nil{
                     self.displayMessage(userMessage: "Korisničko ime ili šifra su netočni. Molimo vas pokušajte ponovno.")
                 }else{
-                    let userDefaults = UserDefaults.standard
-                    userDefaults.set(acessToken, forKey: "accessToken")
-                    let vc = InitialViewController(nibName: "InitialViewController", bundle: nil)
-                    self.present(vc, animated: true, completion: nil)
+                    let vc = InitialViewController()
+                    //self.present(vc, animated: true, completion: nil)
+                    //self.dismiss(animated: true, completion: nil)
+                    let appDelegate = UIApplication.shared.delegate
+                    appDelegate?.window??.rootViewController = vc
                 }
             }
         }

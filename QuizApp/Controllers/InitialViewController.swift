@@ -21,12 +21,15 @@ class InitialViewController: UIViewController {
     @IBAction func signOutButtonTapped(_ sender: UIButton) {
         let userDefaults = UserDefaults.standard
         userDefaults.removeObject(forKey: "accessToken")
+        userDefaults.removeObject(forKey: "id")
         
         let accessToken = userDefaults.string(forKey: "accessToken")
+        let id = userDefaults.string(forKey: "id")
         
-        if (accessToken == nil){
-            let vc = LogInViewController(nibName: "LogInViewController", bundle: nil)
-            self.present(vc, animated: true, completion: nil)
+        if (accessToken == nil || id == nil){
+            let vc = LogInViewController()
+            let appDelegate = UIApplication.shared.delegate
+            appDelegate?.window??.rootViewController = vc
         }
     }
     
@@ -107,10 +110,9 @@ class InitialViewController: UIViewController {
         
     }
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view. 
     }
 
 

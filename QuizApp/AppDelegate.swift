@@ -26,11 +26,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         if (accessToken == nil){
             window?.rootViewController = logInViewController
-        }
-        else{
+        }else{
             window?.rootViewController = initialViewController
         }
-        
+       
         window?.makeKeyAndVisible()
         
         return true
