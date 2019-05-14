@@ -20,14 +20,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         window = UIWindow(frame: UIScreen.main.bounds)
         
         let logInViewController = LogInViewController()
-        let initialViewController = InitialViewController()
+       // let initialViewController = InitialViewController()
+        let viewController = QuizesViewController(viewModel: QuizesViewModel())
+        let navigationController = UINavigationController(rootViewController: viewController)
+        
         let userDefaults = UserDefaults.standard
         let accessToken = userDefaults.string(forKey: "accessToken")
         
         if (accessToken == nil){
             window?.rootViewController = logInViewController
         }else{
-            window?.rootViewController = initialViewController
+            window?.rootViewController = navigationController
         }
        
         window?.makeKeyAndVisible()

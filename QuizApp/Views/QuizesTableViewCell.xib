@@ -50,10 +50,13 @@
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
                             <constraint firstAttribute="bottom" secondItem="tlb-Rs-ZNw" secondAttribute="bottom" constant="16" id="4Le-E3-To5"/>
+                            <constraint firstItem="2h8-kM-hHn" firstAttribute="leading" secondItem="OFh-eP-uxp" secondAttribute="leading" id="5pG-so-8aY"/>
                             <constraint firstItem="tlb-Rs-ZNw" firstAttribute="top" secondItem="fxD-SD-Q8M" secondAttribute="top" constant="16" id="5qf-ep-vRt"/>
                             <constraint firstItem="OFh-eP-uxp" firstAttribute="leading" secondItem="tlb-Rs-ZNw" secondAttribute="trailing" constant="16" id="BOt-go-9eG"/>
                             <constraint firstAttribute="bottom" secondItem="2h8-kM-hHn" secondAttribute="bottom" constant="16" id="Eb7-e1-U0z"/>
                             <constraint firstItem="2h8-kM-hHn" firstAttribute="top" secondItem="dgd-1p-aP8" secondAttribute="bottom" constant="16" id="N3i-5H-p6d"/>
+                            <constraint firstItem="dgd-1p-aP8" firstAttribute="centerY" secondItem="OFh-eP-uxp" secondAttribute="centerY" id="Q06-eA-pC4"/>
+                            <constraint firstItem="dgd-1p-aP8" firstAttribute="trailing" secondItem="2h8-kM-hHn" secondAttribute="trailing" id="Vcr-cK-TFA"/>
                             <constraint firstItem="dgd-1p-aP8" firstAttribute="top" secondItem="fxD-SD-Q8M" secondAttribute="top" constant="16" id="WP0-ia-en5"/>
                             <constraint firstItem="tlb-Rs-ZNw" firstAttribute="leading" secondItem="fxD-SD-Q8M" secondAttribute="leading" constant="8" id="Yiy-tG-Co1"/>
                             <constraint firstAttribute="trailing" secondItem="2h8-kM-hHn" secondAttribute="trailing" constant="16" id="eKk-Wg-WEN"/>

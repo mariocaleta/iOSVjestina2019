@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class QuizesTableViewCell: UITableViewCell {
 
@@ -28,6 +29,18 @@ class QuizesTableViewCell: UITableViewCell {
         quizImageView?.image = nil
     }
     
-    
-    
+    func setup(withQuiz quiz: QuizesCellModel){
+        quizTitleLabel.text = quiz.title
+        quizDescriptionLabel.text = quiz.description
+        if (quiz.level == 1){
+            quizLevelLabel.text = "❉"
+        }else if(quiz.level == 2){
+            quizLevelLabel.text = "❉❉"
+        }else if(quiz.level == 3){
+            quizLevelLabel.text = "❉❉❉"
+        }
+        if let url = quiz.imageURL {
+            quizImageView.kf.setImage(with: url)
+        }
+    }
 }
