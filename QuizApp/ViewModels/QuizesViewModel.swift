@@ -54,7 +54,17 @@ class QuizesViewModel {
         return quizCellModel
     }
     
+    func cellForRow(quiz: Quizzes) -> QuizesCellModel? {
+        let quizCellModel = QuizesCellModel(quiz: quiz)
+        return quizCellModel
+    }
+    
+    
     func numberOfQuizes() -> Int {
         return quizes?.quizzes!.count ?? 0
+    }
+    
+    func quizData() -> Quiz? {
+        return quizes
     }
 }

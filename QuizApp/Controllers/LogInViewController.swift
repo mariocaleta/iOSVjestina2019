@@ -33,11 +33,12 @@ class LogInViewController: UIViewController {
                 if accessToken == nil{
                     self.displayMessage(userMessage: "Korisničko ime ili šifra su netočni. Molimo vas pokušajte ponovno.")
                 }else{
-                    let vc = InitialViewController()
+                    let viewController = QuizesViewController(viewModel: QuizesViewModel())
+                    let navigationController = UINavigationController(rootViewController: viewController)
                     //self.present(vc, animated: true, completion: nil)
                     //self.dismiss(animated: true, completion: nil)
                     let appDelegate = UIApplication.shared.delegate
-                    appDelegate?.window??.rootViewController = vc
+                    appDelegate?.window??.rootViewController = navigationController
                 }
             }
         }

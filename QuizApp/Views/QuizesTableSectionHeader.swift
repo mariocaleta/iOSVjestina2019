@@ -15,19 +15,15 @@ class QuizesTableSectionHeader: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-    }
-    
-    convenience init(frame: CGRect, category: String) {
-        self.init(frame: frame)
         titleLabel = UILabel()
         titleLabel.font = UIFont.systemFont(ofSize: 20)
         titleLabel.textColor = UIColor.darkGray
-        titleLabel.text = category
-        if(category == "SPORTS"){
-            backgroundColor = CategoryType.sports.color
-        }else if(category == "SCIENCE"){
-            backgroundColor = CategoryType.science.color
-        }
+     //   titleLabel.text = category
+     //   if(category == "SPORTS"){
+     //       backgroundColor = CategoryType.sports.color
+     //   }else if(category == "SCIENCE"){
+     //       backgroundColor = CategoryType.science.color
+     //   }
         self.addSubview(titleLabel)
         titleLabel.autoPinEdge(.top, to: .top, of: self, withOffset: 16.0)
         titleLabel.autoAlignAxis(.vertical, toSameAxisOf: self)

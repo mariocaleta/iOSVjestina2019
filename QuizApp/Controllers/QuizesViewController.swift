@@ -13,10 +13,15 @@ class QuizesViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var refreshControl: UIRefreshControl!
+    var tableFooterView: QuizesTableViewFooterView!
     
     let cellReuseIdentifier = "cellReuseIdentifier"
     
     var viewModel: QuizesViewModel!
+    var data: [[Quizzes]] = []
+    var helpArray: [Quizzes] = []
+    var categorys: [String] = []
+    var quizData: Quiz!
     
     convenience init(viewModel: QuizesViewModel){
         self.init()
@@ -24,9 +29,30 @@ class QuizesViewController: UIViewController {
     }
     
     override func viewDidLoad() {
+        bindViewModel()
         super.viewDidLoad()
         setupTableView()
-        bindViewModel()
+        self.refresh()
+    }
+    
+    func setArray(quiz: Quiz){
+        for i in 0..<quiz.quizzes!.count{
+            print(quiz.quizzes![i].category!)
+            categorys.append(quizData.quizzes![i].category!)
+        }
+        let uniqueCategorys = Array(Set(categorys))
+        categorys = uniqueCategorys
+        
+        for i in 0..<categorys.count{
+            for j in 0..<quiz.quizzes!.count{
+                if (categorys[i] == quiz.quizzes![j].category){
+                    helpArray.append(quiz.quizzes![j])
+                }
+            }
+            data.append(helpArray)
+            helpArray.removeAll()
+        }
+     //   self.refresh()
     }
 
     func setupTableView() {
@@ -40,12 +66,15 @@ class QuizesViewController: UIViewController {
         tableView.refreshControl = refreshControl
         
         tableView.register(UINib(nibName: "QuizesTableViewCell", bundle: nil), forCellReuseIdentifier: cellReuseIdentifier)
+        
+        tableFooterView = QuizesTableViewFooterView(frame: CGRect(x: 0, y: 0, width: tableView.frame.width, height: 80))
+        tableView.tableFooterView = tableFooterView
     }
     
     func bindViewModel() {
-        
-        // Ovim pozivom metode fetchReviews, viewModela govorimo viewModelu da dohvati podatke sa servera i nakon dohvacanja refreshamo tableView
         viewModel.fetchQuizes {
+            self.quizData = self.viewModel.quizData()
+            self.setArray(quiz: self.quizData!)
             self.refresh()
         }
     }
@@ -67,12 +96,22 @@ extension QuizesViewController: UITableViewDelegate {
     // metoda UITableView delegata koju UITableView zove kada zeli dobiti view za header jedne sekcije
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = QuizesTableSectionHeader()
+        view.titleLabel.text = categorys[section]
+        if(categorys[section] == "SPORTS"){
+            view.backgroundColor = CategoryType.sports.color
+        }else if(categorys[section] == "SCIENCE"){
+            view.backgroundColor = CategoryType.science.color
+        }
         return view
     }
     
     // metoda UITableView delegata koju UITableView zove kada zeli dobiti visinu view-a hedera jedne sekcije
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50.0
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 1.0
     }
     
     // metoda UITableView delegata koju UITableView zove kada se dogodi tap na neku celiju na indexPath-u
@@ -98,19 +137,21 @@ extension QuizesViewController: UITableViewDataSource {
         // Ovdje viewModel vraca objekt tipa ReviewCellModel koji sluzi tome da sadrzi podatke Review-a koji su dovolji ReviewsTableViewCell-u da se njima napuni
         // Ovdje mozemo, ako zelimo bit manje striktni dohvatiti i Review i njega poslati celiji da se napuni podacima
         // Takoder, recimo ako je celija kompliciranija, mozemo dohvatiti novi viewModel koji ce celija korisiti da se napuni podacima i za bilo sto drugo sto joj treba
-        if let review = viewModel.quiz(atIndex: indexPath.row) {
+        if let review = viewModel.cellForRow(quiz: data[indexPath.section][indexPath.row]){
             cell.setup(withQuiz: review)
         }
         return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return categorys.count
+        //return 1
     }
     
     // Metode dataSource-a koju UITableView zove da dobije broj redaka koje treba prikazati u tablici
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // pitamo viewModel za broj redaka koje treba prikazati, viewModel ima informaciju o modelu, viewModel je dataSoruce ovog viewControllera
-        return viewModel.numberOfQuizes()
+        return data[section].count
+        //return viewModel.numberOfQuizes()
     }
 }
