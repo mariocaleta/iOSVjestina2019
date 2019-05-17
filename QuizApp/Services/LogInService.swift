@@ -65,7 +65,9 @@ class LogInService {
                 }
             } catch {
                 print(error)
-                completion(nil)
+                if let err = error as? URLError, err.code  == URLError.Code.notConnectedToInternet{
+                    completion("No internet")
+                }
             }
             
             }

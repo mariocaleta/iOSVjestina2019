@@ -30,6 +30,9 @@ class LogInViewController: UIViewController {
             (accessToken) in
             DispatchQueue.main.async {
                 self.removeActivityIndicator(activityIndicator: myActivityIndicator)
+                if accessToken == "No internet" {
+                    self.displayMessage(userMessage: "There is no internet connection! Connect to internet and try again!")
+                }
                 if accessToken == nil{
                     self.displayMessage(userMessage: "Korisničko ime ili šifra su netočni. Molimo vas pokušajte ponovno.")
                 }else{

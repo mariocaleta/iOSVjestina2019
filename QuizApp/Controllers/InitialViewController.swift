@@ -92,7 +92,7 @@ class InitialViewController: UIViewController {
                         self.quizCategoryLabel.text = responseModel.quizzes![0].title
                     }
                     
-                    self.addQuestionCustomView(quiz: responseModel)
+                    //self.addQuestionCustomView(quiz: responseModel)
                     
                 }
                 else{
@@ -103,12 +103,12 @@ class InitialViewController: UIViewController {
         }
     }
     
-    func addQuestionCustomView(quiz: Quiz) {
+  //  func addQuestionCustomView(quiz: Quiz) {
+  //
+  //      let questionView = QuestionView(frame: CGRect(origin: CGPoint(x: 10, y: 10), size: CGSize(width: 500, height: 500)), quiz: quiz)
+  //      questionCustomView.addSubview(questionView)
         
-        let questionView = QuestionView(frame: CGRect(origin: CGPoint(x: 10, y: 10), size: CGSize(width: 500, height: 500)), quiz: quiz)
-        questionCustomView.addSubview(questionView)
-        
-    }
+  //  }
     
     
     override func viewDidLoad() {

@@ -32,6 +32,7 @@ class QuizesTableViewFooterView: UIView {
         super.init(frame: frame)
         signOutButton = UIButton()
         signOutButton.setTitle("Sign out", for: UIControl.State.normal)
+        signOutButton.backgroundColor = .gray
         addSubview(signOutButton)
         signOutButton.autoAlignAxis(.vertical, toSameAxisOf: self)
         signOutButton.autoPinEdge(.top, to: .bottom, of: self, withOffset: 16.0)
