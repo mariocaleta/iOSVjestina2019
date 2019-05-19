@@ -36,13 +36,8 @@ class QuizesViewModel {
         }
     }
     
-    func viewModel(atIndex index: Int) -> SingleQuizViewModel? {
-        if let quizes = quizes {
-            if index >= 0 && index < quizes.quizzes!.count {
-                return SingleQuizViewModel(quiz: quizes.quizzes![index])
-            }
-        }
-        return nil
+    func singleQuizViewModel(atIndex quiz: Quizzes) -> SingleQuizViewModel? {
+        return SingleQuizViewModel(quiz: quiz)
     }
     
     func quiz(atIndex index: Int) -> QuizesCellModel? {

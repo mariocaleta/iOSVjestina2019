@@ -117,8 +117,7 @@ extension QuizesViewController: UITableViewDelegate {
     // metoda UITableView delegata koju UITableView zove kada se dogodi tap na neku celiju na indexPath-u
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-  
-        if let viewModel = viewModel.viewModel(atIndex: indexPath.row) {
+        if let viewModel = viewModel.singleQuizViewModel(atIndex: data[indexPath.section][indexPath.row]) {
             let singleQuizViewController = SingleQuizViewController(viewModel: viewModel)
             navigationController?.pushViewController(singleQuizViewController, animated: true)
         }
