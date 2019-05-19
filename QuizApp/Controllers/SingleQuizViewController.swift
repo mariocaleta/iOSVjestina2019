@@ -15,9 +15,12 @@ class SingleQuizViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
     @IBOutlet weak var button: UIButton!
     @IBOutlet weak var scrollView: UIScrollView!
+    var timeOfStart: Date!
+    var time: Double!
     @IBAction func startQuizButtonTapped(_ sender: UIButton) {
         self.scrollView.isHidden = false
         self.button.isHidden = true
+        timeOfStart = Date()
     }
     
     var viewModel: SingleQuizViewModel!
@@ -47,6 +50,51 @@ class SingleQuizViewController: UIViewController {
             scrollView.addSubview(questionView)
         }
     }
+    
+    func displayFailMessage(userMessage : String) -> Void {
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: "Alert", message: userMessage, preferredStyle: .alert)
+            let sendAgain = UIAlertAction(title: "Pošalji ponovno", style: .default){
+                (action:UIAlertAction!) in
+                DispatchQueue.main.async {
+                    let postResultService = PostResultService()
+                    postResultService.postResult(quizId: self.viewModel.quiz!.id!, time: self.time, numberOfCorrectAnswers: self.numberOfCorrectAnswers){
+                        (result) in
+                        DispatchQueue.main.async {
+                            print(result!)
+                            self.navigationController?.popViewController(animated: true)
+                        }
+                    }
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
+            let OkAction = UIAlertAction(title: "Novi kviz", style: .default){
+                (action:UIAlertAction!) in
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: true)
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
+            alertController.addAction(sendAgain)
+            alertController.addAction(OkAction)
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
+    
+    func displaySuccessMessage(userMessage : String) -> Void {
+        DispatchQueue.main.async {
+            let alertController = UIAlertController(title: "Čestitamo!", message: userMessage, preferredStyle: .alert)
+            let OkAction = UIAlertAction(title: "Novi kviz", style: .default){
+                (action:UIAlertAction!) in
+                DispatchQueue.main.async {
+                    self.navigationController?.popViewController(animated: true)
+                    self.dismiss(animated: true, completion: nil)
+                }
+            }
+            alertController.addAction(OkAction)
+            self.present(alertController, animated: true, completion: nil)
+        }
+    }
 }
 
 extension SingleQuizViewController : QuestionViewDelegate {
@@ -56,7 +104,7 @@ extension SingleQuizViewController : QuestionViewDelegate {
         }
         
         let pageWidth:CGFloat = self.scrollView.frame.width
-        let maxWidth:CGFloat = pageWidth * 10
+        let maxWidth:CGFloat = pageWidth * CGFloat(viewModel.quiz!.questions!.count)
         let contentOffset:CGFloat = self.scrollView.contentOffset.x
         
         var slideToX = contentOffset + pageWidth
@@ -64,8 +112,35 @@ extension SingleQuizViewController : QuestionViewDelegate {
         if  contentOffset + pageWidth == maxWidth
         {
             slideToX = 0
+            time = Date().timeIntervalSince(timeOfStart)
+            print(time!)
+            let postResultService = PostResultService()
+            postResultService.postResult(quizId: viewModel.quiz!.id!, time: time, numberOfCorrectAnswers: numberOfCorrectAnswers){
+                (result) in
+                DispatchQueue.main.async {
+                    switch result {
+                    case ResponseCode.success.code:
+                        print("Uspješno poslano")
+                        self.displaySuccessMessage(userMessage: "Uspješno poslani rezultati kviza!")
+                    case ResponseCode.unauthorized.code:
+                        print("Unauthorized")
+                        self.displayFailMessage(userMessage: "Nepostojeći token!")
+                    case ResponseCode.forbidden.code:
+                        print("Forbidden")
+                        self.displayFailMessage(userMessage: "Token ne odgovara useru!")
+                    case ResponseCode.notFound.code:
+                        print("Not found")
+                        self.displayFailMessage(userMessage: "quiz_id ne postoji!")
+                    case ResponseCode.badRequest.code:
+                        print("Bad request")
+                        self.displayFailMessage(userMessage: "time nije decimalni broj ili no_of_correct nije integer")
+                    default:
+                        print("Default")
+                    }
+                }
+            }
+        }else{
+            self.scrollView.scrollRectToVisible(CGRect(x:slideToX, y:0, width:pageWidth, height:self.scrollView.frame.height), animated: true)
         }
-       // self.scrollView.contentOffset = CGPoint(x: 414, y: 0)
-        self.scrollView.scrollRectToVisible(CGRect(x:slideToX, y:0, width:pageWidth, height:self.scrollView.frame.height), animated: true)
     }
 }

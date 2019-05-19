@@ -15,10 +15,10 @@ class QuizesTableViewCell: UITableViewCell {
     @IBOutlet weak var quizDescriptionLabel: UILabel!
     @IBOutlet weak var quizLevelLabel: UILabel!
     @IBOutlet weak var quizImageView: UIImageView!
+    @IBOutlet weak var resultsButton: UIButton!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        // Initialization code
     }
 
     override func prepareForReuse() {

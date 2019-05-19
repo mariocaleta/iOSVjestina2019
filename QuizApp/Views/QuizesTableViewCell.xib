@@ -22,15 +22,15 @@
                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="fxD-SD-Q8M">
                         <rect key="frame" x="0.0" y="0.0" width="414" height="151.5"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OFh-eP-uxp" userLabel="QuizTitle">
-                                <rect key="frame" x="143.5" y="16" width="42" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="OFh-eP-uxp" userLabel="QuizTitle">
+                                <rect key="frame" x="143.5" y="16" width="37.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="2h8-kM-hHn" userLabel="QuizDescription">
-                                <rect key="frame" x="143.5" y="53" width="254.5" height="82.5"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <rect key="frame" x="143.5" y="53" width="190.5" height="82.5"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -46,6 +46,10 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Wkc-W3-Nix">
+                                <rect key="frame" x="342" y="87" width="56" height="32.5"/>
+                                <state key="normal" title="Results"/>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -56,14 +60,17 @@
                             <constraint firstAttribute="bottom" secondItem="2h8-kM-hHn" secondAttribute="bottom" constant="16" id="Eb7-e1-U0z"/>
                             <constraint firstItem="2h8-kM-hHn" firstAttribute="top" secondItem="dgd-1p-aP8" secondAttribute="bottom" constant="16" id="N3i-5H-p6d"/>
                             <constraint firstItem="dgd-1p-aP8" firstAttribute="centerY" secondItem="OFh-eP-uxp" secondAttribute="centerY" id="Q06-eA-pC4"/>
-                            <constraint firstItem="dgd-1p-aP8" firstAttribute="trailing" secondItem="2h8-kM-hHn" secondAttribute="trailing" id="Vcr-cK-TFA"/>
+                            <constraint firstItem="Wkc-W3-Nix" firstAttribute="top" secondItem="dgd-1p-aP8" secondAttribute="bottom" constant="50" id="RUX-iC-uyc"/>
+                            <constraint firstAttribute="bottom" secondItem="Wkc-W3-Nix" secondAttribute="bottom" constant="32" id="UQW-pU-Vj7"/>
                             <constraint firstItem="dgd-1p-aP8" firstAttribute="top" secondItem="fxD-SD-Q8M" secondAttribute="top" constant="16" id="WP0-ia-en5"/>
                             <constraint firstItem="tlb-Rs-ZNw" firstAttribute="leading" secondItem="fxD-SD-Q8M" secondAttribute="leading" constant="8" id="Yiy-tG-Co1"/>
-                            <constraint firstAttribute="trailing" secondItem="2h8-kM-hHn" secondAttribute="trailing" constant="16" id="eKk-Wg-WEN"/>
+                            <constraint firstAttribute="trailing" secondItem="2h8-kM-hHn" secondAttribute="trailing" constant="80" id="eKk-Wg-WEN"/>
                             <constraint firstAttribute="trailing" secondItem="dgd-1p-aP8" secondAttribute="trailing" constant="16" id="nEC-RG-ToH"/>
                             <constraint firstItem="2h8-kM-hHn" firstAttribute="top" secondItem="OFh-eP-uxp" secondAttribute="bottom" constant="16" id="sPn-yX-gDc"/>
                             <constraint firstItem="OFh-eP-uxp" firstAttribute="top" secondItem="fxD-SD-Q8M" secondAttribute="top" constant="16" id="t0m-s0-Iya"/>
                             <constraint firstItem="2h8-kM-hHn" firstAttribute="leading" secondItem="tlb-Rs-ZNw" secondAttribute="trailing" constant="16" id="v8O-vF-e1k"/>
+                            <constraint firstItem="Wkc-W3-Nix" firstAttribute="leading" secondItem="2h8-kM-hHn" secondAttribute="trailing" constant="8" id="w6f-Rw-LVN"/>
+                            <constraint firstAttribute="trailing" secondItem="Wkc-W3-Nix" secondAttribute="trailing" constant="16" id="xnI-ym-eyb"/>
                         </constraints>
                     </view>
                 </subviews>
@@ -80,6 +87,7 @@
                 <outlet property="quizImageView" destination="tlb-Rs-ZNw" id="biZ-UY-6Rq"/>
                 <outlet property="quizLevelLabel" destination="dgd-1p-aP8" id="i6T-yi-8Ql"/>
                 <outlet property="quizTitleLabel" destination="OFh-eP-uxp" id="IVe-oM-1YB"/>
+                <outlet property="resultsButton" destination="Wkc-W3-Nix" id="elm-m4-Tb2"/>
             </connections>
             <point key="canvasLocation" x="155.07246376811597" y="107.8125"/>
         </tableViewCell>

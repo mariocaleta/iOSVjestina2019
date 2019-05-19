@@ -85,6 +85,11 @@ class QuizesViewController: UIViewController {
             self.refreshControl.endRefreshing()
         }
     }
+    
+    @objc func sendResults(sender: UIButton){
+        let resultsViewController = ResultsViewController(quizId: sender.tag)
+        navigationController?.pushViewController(resultsViewController, animated: true)
+    }
 }
 
 extension QuizesViewController: UITableViewDelegate {
@@ -129,13 +134,9 @@ extension QuizesViewController: UITableViewDataSource {
     // Metoda UITableView dataSource-a koju UITableView zove da dobije UITableViewCell koji ce prikazati za odredeni indexPath
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
-        // celije 'stvaramo' metodom dequeueReusableCell koja zapravo dohvaca prvu slobodnu celiju iz skupa celija koje UITableView ima stvoreno kod sebe
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! QuizesTableViewCell
-        
-        // Ovdje pitamo viewModel da nam da 'model' objekt koji ce celija iskoristiti da se napuni podacima
-        // Ovdje viewModel vraca objekt tipa ReviewCellModel koji sluzi tome da sadrzi podatke Review-a koji su dovolji ReviewsTableViewCell-u da se njima napuni
-        // Ovdje mozemo, ako zelimo bit manje striktni dohvatiti i Review i njega poslati celiji da se napuni podacima
-        // Takoder, recimo ako je celija kompliciranija, mozemo dohvatiti novi viewModel koji ce celija korisiti da se napuni podacima i za bilo sto drugo sto joj treba
+        cell.resultsButton.tag = data[indexPath.section][indexPath.row].id!
+        cell.resultsButton.addTarget(self, action: #selector(QuizesViewController.sendResults), for: .touchUpInside)
         if let review = viewModel.cellForRow(quiz: data[indexPath.section][indexPath.row]){
             cell.setup(withQuiz: review)
         }

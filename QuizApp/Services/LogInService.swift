@@ -38,6 +38,7 @@ class LogInService {
                 if let err = error as? URLError, err.code  == URLError.Code.notConnectedToInternet
                 {
                     print("There is no internet connection!")
+                    completion("No internet")
                 //    let alertController = UIAlertController(title: "Alert", message: "There is no internet connection!", preferredStyle: .alert)
               //      alertController.addAction(UIAlertAction(title: "Close", style: .cancel, handler: nil))
                     
@@ -69,7 +70,6 @@ class LogInService {
                     completion("No internet")
                 }
             }
-            
             }
             dataTask.resume()
     }

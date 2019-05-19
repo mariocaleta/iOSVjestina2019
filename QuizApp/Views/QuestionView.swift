@@ -19,6 +19,9 @@ class QuestionView: UIView {
     var button2: UIButton?
     var button3: UIButton?
     var button4: UIButton?
+    var timerLabel: UILabel?
+    var seconds = 5
+    var timer = Timer()
     var correctAnswer: Int?
     weak var delegate: QuestionViewDelegate?
     
@@ -56,6 +59,10 @@ class QuestionView: UIView {
         button4?.setTitle(question.answers![3], for: .normal)
         button4?.addTarget(self, action: #selector(QuestionView.buttonAction), for: UIControl.Event.touchUpInside)
         
+        timerLabel = UILabel(frame: CGRect(origin: CGPoint(x: 100, y: 300), size: CGSize(width: 100, height: 50)))
+        timerLabel?.text = String(seconds)
+        timerLabel?.textAlignment = .center
+        timerLabel?.backgroundColor = .gray
         
         if let button = button1{
             self.addSubview(button)
@@ -76,6 +83,10 @@ class QuestionView: UIView {
         if let questionText = questionText {
             self.addSubview(questionText)
         }
+        
+        if let timerLabel = timerLabel{
+            self.addSubview(timerLabel)
+        }
     }
     
     override init(frame: CGRect) {
@@ -86,6 +97,21 @@ class QuestionView: UIView {
         super.init(coder: aDecoder)
     }
     
+    @objc func updateTimer(timer: Timer){
+        seconds -= 1
+        timerLabel?.text = String(seconds)
+        let info = timer.userInfo as! Int
+        if(seconds == 0){
+            timer.invalidate()
+            seconds = 5
+            if(info == 1){
+                delegate?.moveToNextQusetion(correctAnswer: true)
+            }else if(info == 0){
+                delegate?.moveToNextQusetion(correctAnswer: false)
+            }
+        }
+    }
+    
     @objc func buttonAction(sender: UIButton!) {
         if sender.tag == correctAnswer{
            sender.backgroundColor = .green
@@ -94,11 +120,19 @@ class QuestionView: UIView {
                     Button.isEnabled = false
                 }
             }
-            delegate?.moveToNextQusetion(correctAnswer: true)
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: 1, repeats: true)
         }
         else{
             sender.backgroundColor = .red
-            delegate?.moveToNextQusetion(correctAnswer: false)
+            if let Button = self.viewWithTag(correctAnswer!) as? UIButton{
+                Button.backgroundColor = .green
+            }
+            for i in 1..<5 {
+                if let Button = self.viewWithTag(i) as? UIButton{
+                    Button.isEnabled = false
+                }
+            }
+            timer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(updateTimer), userInfo: 0, repeats: true)
         }
     }
     
