@@ -12,15 +12,19 @@ struct Results : Codable {
     let username : String?
     let score : String?
     
-    enum CodingKeys: String, CodingKey {
-  
-        case username = "username"
-        case score = "score"
+    init(username: String, score: String) {
+        self.username = username
+        self.score = score
     }
-  
-    init(from decoder: Decoder) throws {
-        let values = try decoder.container(keyedBy: CodingKeys.self)
-        username = try values.decodeIfPresent(String.self, forKey: .username)
-        score = try values.decodeIfPresent(String.self, forKey: .score)
-    }
+ //   enum CodingKeys: String, CodingKey {
+
+ //       case username = "username"
+ //       case score = "score"
+ //   }
+
+ //   init(from decoder: Decoder) throws {
+ //       let values = try decoder.container(keyedBy: CodingKeys.self)
+ //       username = try values.decodeIfPresent(String.self, forKey: .username)
+ //       score = try values.decodeIfPresent(String.self, forKey: .score)
+ //   }
 }
