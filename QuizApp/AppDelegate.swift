@@ -21,8 +21,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         let logInViewController = LogInViewController()
        // let initialViewController = InitialViewController()
-        let viewController = QuizesViewController(viewModel: QuizesViewModel())
-        let navigationController = UINavigationController(rootViewController: viewController)
+        //let viewController = QuizesViewController(viewModel: QuizesViewModel())
+        //let navigationController = UINavigationController(rootViewController: viewController)
         
         let userDefaults = UserDefaults.standard
         let accessToken = userDefaults.string(forKey: "accessToken")
@@ -30,7 +30,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         if (accessToken == nil){
             window?.rootViewController = logInViewController
         }else{
-            window?.rootViewController = navigationController
+            window?.rootViewController = TabBarViewController()
         }
        
         window?.makeKeyAndVisible()

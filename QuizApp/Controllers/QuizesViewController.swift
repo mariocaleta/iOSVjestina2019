@@ -18,10 +18,6 @@ class QuizesViewController: UIViewController {
     let cellReuseIdentifier = "cellReuseIdentifier"
     
     var viewModel: QuizesViewModel!
-    var data: [[Quizzes]] = []
-    var helpArray: [Quizzes] = []
-    var categorys: [String] = []
-    var quizData: Quiz!
     
     convenience init(viewModel: QuizesViewModel){
         self.init()
@@ -31,28 +27,9 @@ class QuizesViewController: UIViewController {
     override func viewDidLoad() {
         bindViewModel()
         super.viewDidLoad()
+        self.title = "Quizes"
         setupTableView()
         self.refresh()
-    }
-    
-    func setArray(quiz: Quiz){
-        for i in 0..<quiz.quizzes!.count{
-            print(quiz.quizzes![i].category!)
-            categorys.append(quizData.quizzes![i].category!)
-        }
-        let uniqueCategorys = Array(Set(categorys))
-        categorys = uniqueCategorys
-        
-        for i in 0..<categorys.count{
-            for j in 0..<quiz.quizzes!.count{
-                if (categorys[i] == quiz.quizzes![j].category){
-                    helpArray.append(quiz.quizzes![j])
-                }
-            }
-            data.append(helpArray)
-            helpArray.removeAll()
-        }
-     //   self.refresh()
     }
 
     func setupTableView() {
@@ -73,8 +50,6 @@ class QuizesViewController: UIViewController {
     
     func bindViewModel() {
         viewModel.fetchQuizes {
-            self.quizData = self.viewModel.quizData()
-            self.setArray(quiz: self.quizData!)
             self.refresh()
         }
     }
@@ -93,24 +68,21 @@ class QuizesViewController: UIViewController {
 }
 
 extension QuizesViewController: UITableViewDelegate {
-    // metoda UITableView delegata koju UITableView zove kada zeli dobiti visinu celije za oderedeni indexPath
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 150.0
     }
     
-    // metoda UITableView delegata koju UITableView zove kada zeli dobiti view za header jedne sekcije
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let view = QuizesTableSectionHeader()
-        view.titleLabel.text = categorys[section]
-        if(categorys[section] == "SPORTS"){
+        view.titleLabel.text = viewModel.categorys[section]
+        if(viewModel.categorys[section] == "SPORTS"){
             view.backgroundColor = CategoryType.sports.color
-        }else if(categorys[section] == "SCIENCE"){
+        }else if(viewModel.categorys[section] == "SCIENCE"){
             view.backgroundColor = CategoryType.science.color
         }
         return view
     }
     
-    // metoda UITableView delegata koju UITableView zove kada zeli dobiti visinu view-a hedera jedne sekcije
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 50.0
     }
@@ -119,10 +91,9 @@ extension QuizesViewController: UITableViewDelegate {
         return 1.0
     }
     
-    // metoda UITableView delegata koju UITableView zove kada se dogodi tap na neku celiju na indexPath-u
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: true)
-        if let viewModel = viewModel.singleQuizViewModel(atIndex: data[indexPath.section][indexPath.row]) {
+        if let viewModel = viewModel.singleQuizViewModel(atIndex: viewModel.sortedQuizes[indexPath.section][indexPath.row]) {
             let singleQuizViewController = SingleQuizViewController(viewModel: viewModel)
             navigationController?.pushViewController(singleQuizViewController, animated: true)
         }
@@ -131,27 +102,22 @@ extension QuizesViewController: UITableViewDelegate {
 
 extension QuizesViewController: UITableViewDataSource {
     
-    // Metoda UITableView dataSource-a koju UITableView zove da dobije UITableViewCell koji ce prikazati za odredeni indexPath
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: cellReuseIdentifier, for: indexPath) as! QuizesTableViewCell
-        cell.resultsButton.tag = data[indexPath.section][indexPath.row].id!
+        cell.resultsButton.tag = Int(viewModel.sortedQuizes[indexPath.section][indexPath.row].id)
         cell.resultsButton.addTarget(self, action: #selector(QuizesViewController.sendResults), for: .touchUpInside)
-        if let review = viewModel.cellForRow(quiz: data[indexPath.section][indexPath.row]){
+        if let review = viewModel.cellForRow(quiz: viewModel.sortedQuizes[indexPath.section][indexPath.row]){
             cell.setup(withQuiz: review)
         }
         return cell
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return categorys.count
-        //return 1
+        return viewModel.categorys.count
     }
     
-    // Metode dataSource-a koju UITableView zove da dobije broj redaka koje treba prikazati u tablici
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // pitamo viewModel za broj redaka koje treba prikazati, viewModel ima informaciju o modelu, viewModel je dataSoruce ovog viewControllera
-        return data[section].count
-        //return viewModel.numberOfQuizes()
+        return viewModel.sortedQuizes[section].count
     }
 }

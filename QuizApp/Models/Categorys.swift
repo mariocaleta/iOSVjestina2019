@@ -9,13 +9,12 @@
 import Foundation
 import UIKit
 
-enum CategoryType {
-    case sports
-    case science
+enum CategoryType : String {
+    case sports = "SPORTS"
+    case science = "SCIENCE"
     
     var color : UIColor{
     switch self {
-    
     case .sports:
         return UIColor.red
     

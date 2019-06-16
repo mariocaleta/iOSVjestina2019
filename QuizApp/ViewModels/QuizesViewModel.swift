@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import Reachability
 
 struct QuizesCellModel{
     
@@ -16,27 +17,68 @@ struct QuizesCellModel{
     let category: String
     let imageURL: URL?
     
-    init(quiz: Quizzes) {
-        self.title = quiz.title ?? ""
-        self.description = quiz.description ?? ""
-        self.level = quiz.level ?? 1
-        self.category = quiz.category ?? ""
-        self.imageURL = URL(string: quiz.image ?? "")
+    init(quiz: Quiz) {
+        self.title = quiz.title
+        self.description = quiz.desc ?? ""
+        self.level = Int(quiz.level)
+        self.category = quiz.category
+        self.imageURL = URL(string: quiz.imageUrl ?? "")
     }
 }
 
 class QuizesViewModel {
     
-    var quizes: Quiz?
+    var quizes: [Quiz]?
+    var sortedQuizes: [[Quiz]] = []
+    var helpArray: [Quiz] = []
+    var categorys: [String] = []
+    let reachability = Reachability()!
+    private var isFetched: Bool = false
     
     func fetchQuizes(completion: @escaping (() -> Void))  {
-        QuizService().fetchQuiz { [weak self] (quizes) in
-            self?.quizes = quizes
-            completion()
+        if(!self.isFetched) {
+            self.quizes = DataController.shared.fetchQuiz()
+            self.setArray(quiz: (self.quizes)!)
+            reachability.whenReachable = { reachability in
+                QuizService().fetchQuiz { [weak self] (quizes) in
+                    self?.quizes = DataController.shared.fetchQuiz()
+                    self?.setArray(quiz: (self?.quizes)!)
+                    self?.isFetched = true
+                    completion()
+                }
+            }
+        } else {
+            self.quizes = DataController.shared.fetchQuiz()
+            self.setArray(quiz: (self.quizes)!)
         }
     }
     
-    func singleQuizViewModel(atIndex quiz: Quizzes) -> SingleQuizViewModel? {
+    func searchQuizes(keyword: String) {
+        self.quizes = DataController.shared.searchQuizes(keyword: keyword)
+        self.setArray(quiz: quizes!)
+    }
+    
+    func setArray(quiz: [Quiz]){
+        sortedQuizes.removeAll()
+        categorys.removeAll()
+        for i in 0..<quiz.count{
+            categorys.append(quizes![i].category)
+        }
+        let uniqueCategorys = Array(Set(categorys))
+        categorys = uniqueCategorys
+        
+        for i in 0..<categorys.count{
+            for j in 0..<quiz.count{
+                if (categorys[i] == quiz[j].category){
+                    helpArray.append(quiz[j])
+                }
+            }
+            sortedQuizes.append(helpArray)
+            helpArray.removeAll()
+        }
+    }
+    
+    func singleQuizViewModel(atIndex quiz: Quiz) -> SingleQuizViewModel? {
         return SingleQuizViewModel(quiz: quiz)
     }
     
@@ -45,21 +87,21 @@ class QuizesViewModel {
             return nil
         }
         
-        let quizCellModel = QuizesCellModel(quiz: quizes.quizzes![index])
+        let quizCellModel = QuizesCellModel(quiz: quizes[index])
         return quizCellModel
     }
     
-    func cellForRow(quiz: Quizzes) -> QuizesCellModel? {
+    func cellForRow(quiz: Quiz) -> QuizesCellModel? {
         let quizCellModel = QuizesCellModel(quiz: quiz)
         return quizCellModel
     }
     
     
     func numberOfQuizes() -> Int {
-        return quizes?.quizzes!.count ?? 0
+        return quizes?.count ?? 0
     }
     
-    func quizData() -> Quiz? {
-        return quizes
+    func quizData() -> [Quiz] {
+        return quizes!
     }
 }

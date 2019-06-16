@@ -12,6 +12,8 @@ class LogInViewController: UIViewController {
 
     @IBOutlet weak var userNameTextField: UITextField!
     @IBOutlet weak var passwordTextField: UITextField!
+    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var LogInButton: UIButton!
     
     @IBAction func logInButtonTapped(_ sender: UIButton) {
         
@@ -36,12 +38,12 @@ class LogInViewController: UIViewController {
                 if accessToken == nil{
                     self.displayMessage(userMessage: "Korisničko ime ili šifra su netočni. Molimo vas pokušajte ponovno.")
                 }else{
-                    let viewController = QuizesViewController(viewModel: QuizesViewModel())
-                    let navigationController = UINavigationController(rootViewController: viewController)
+                    //let viewController = QuizesViewController(viewModel: QuizesViewModel())
+                    //let navigationController = UINavigationController(rootViewController: viewController)
                     //self.present(vc, animated: true, completion: nil)
                     //self.dismiss(animated: true, completion: nil)
                     let appDelegate = UIApplication.shared.delegate
-                    appDelegate?.window??.rootViewController = navigationController
+                    appDelegate?.window??.rootViewController = TabBarViewController()
                 }
             }
         }

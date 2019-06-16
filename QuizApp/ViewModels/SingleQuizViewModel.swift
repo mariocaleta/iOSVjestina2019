@@ -9,9 +9,9 @@
 import Foundation
 
 class SingleQuizViewModel {
-    var quiz: Quizzes? = nil
+    var quiz: Quiz? = nil
     
-    init(quiz: Quizzes) {
+    init(quiz: Quiz) {
         self.quiz = quiz
     }
     
@@ -20,9 +20,21 @@ class SingleQuizViewModel {
     }
     
     var imageUrl: URL? {
-        if let urlString = quiz?.image {
+        if let urlString = quiz?.imageUrl {
             return URL(string: urlString)
         }
         return nil
+    }
+    
+    var isQuizOpened: Bool {
+        return quiz!.opened
+    }
+    
+    func markQuizOpened() {
+        quiz!.opened = true
+    }
+    
+    func markQuizClosed() {
+        quiz!.opened = false
     }
 }

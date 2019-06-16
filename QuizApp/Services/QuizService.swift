@@ -10,7 +10,7 @@ import Foundation
 
 class QuizService {
     
-    func fetchQuiz(completion: @escaping ((Quiz?) -> Void)){
+    func fetchQuiz(completion: @escaping ([Quiz]?) -> Void){
         
         let urlString = "https://iosquiz.herokuapp.com/api/quizzes"
         
@@ -22,11 +22,25 @@ class QuizService {
             
             let dataTask = URLSession.shared.dataTask(with: request) { (data, response, error) in
                
+                var quizzes: [Quiz] = []
+                
+                if(data == nil){
+                    completion(nil)
+                    return
+                }
+                
                 do {
-                    let jsonDecoder = JSONDecoder()
-                    let responseModel = try jsonDecoder.decode(Quiz.self, from: data!)
-                    print(responseModel)
-                    completion(responseModel)
+                    let json = try JSONSerialization.jsonObject(with: data!, options: [])
+                    guard let jsonDict = json as? [String: Any], let jsonResults = jsonDict["quizzes"] as? [[String: Any]] else {
+                        completion(nil)
+                        return
+                    }
+                    jsonResults.forEach {
+                        if let quiz = Quiz.createFrom(json: $0) {
+                            quizzes.append(quiz)
+                        }
+                    }
+                    completion(quizzes)
                 } catch {
                     print(error)
                     completion(nil)

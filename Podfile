@@ -9,5 +9,6 @@ target 'QuizApp' do
   # Pods for QuizApp
 pod 'Kingfisher', '~> 5.4'
 pod 'PureLayout', '~> 3.1'
+pod 'ReachabilitySwift'
  
 end

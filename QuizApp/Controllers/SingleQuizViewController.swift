@@ -18,6 +18,10 @@ class SingleQuizViewController: UIViewController {
     var timeOfStart: Date!
     var time: Double!
     @IBAction func startQuizButtonTapped(_ sender: UIButton) {
+        if viewModel.isQuizOpened {
+            return
+        }
+        viewModel.markQuizOpened()
         self.scrollView.isHidden = false
         self.button.isHidden = true
         timeOfStart = Date()
@@ -33,19 +37,31 @@ class SingleQuizViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Quiz"
         self.scrollView.frame = CGRect(x:0, y:0, width:self.view.frame.width, height:414)
         self.scrollView.contentSize = CGSize(width:self.scrollView.frame.width * 10, height:self.scrollView.frame.height)
         self.scrollView.isHidden = true
         bindViewModel()
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        if let vc = navigationController?.viewControllers {
+            if vc[vc.count - 1] == self {
+            } else {
+                viewModel.markQuizClosed()
+            }
+        }
+    }
+    
     func bindViewModel() {
+        let questions = viewModel.quiz?.questions.array as! [Question]
         let scrollViewWidth:CGFloat = self.scrollView.frame.width
         let scrollViewHeight:CGFloat = self.scrollView.frame.height
         titleLabel.text = viewModel.title
         imageView.kf.setImage(with: viewModel.imageUrl)
-        for i in 0..<viewModel.quiz!.questions!.count{
-            let questionView = QuestionView(frame: CGRect(origin: CGPoint(x: scrollViewWidth * CGFloat(i), y: 0), size: CGSize(width: scrollViewWidth, height: scrollViewHeight)), question: viewModel.quiz!.questions![i])
+        for i in 0..<viewModel.quiz!.questions.count{
+            let questionView = QuestionView(frame: CGRect(origin: CGPoint(x: scrollViewWidth * CGFloat(i), y: 0), size: CGSize(width: scrollViewWidth, height: scrollViewHeight)), question: questions[i])
             questionView.delegate = self
             scrollView.addSubview(questionView)
         }
@@ -58,7 +74,7 @@ class SingleQuizViewController: UIViewController {
                 (action:UIAlertAction!) in
                 DispatchQueue.main.async {
                     let postResultService = PostResultService()
-                    postResultService.postResult(quizId: self.viewModel.quiz!.id!, time: self.time, numberOfCorrectAnswers: self.numberOfCorrectAnswers){
+                    postResultService.postResult(quizId: Int(self.viewModel.quiz!.id), time: self.time, numberOfCorrectAnswers: self.numberOfCorrectAnswers){
                         (result) in
                         DispatchQueue.main.async {
                             print(result!)
@@ -104,7 +120,7 @@ extension SingleQuizViewController : QuestionViewDelegate {
         }
         
         let pageWidth:CGFloat = self.scrollView.frame.width
-        let maxWidth:CGFloat = pageWidth * CGFloat(viewModel.quiz!.questions!.count)
+        let maxWidth:CGFloat = pageWidth * CGFloat(viewModel.quiz!.questions.count)
         let contentOffset:CGFloat = self.scrollView.contentOffset.x
         
         var slideToX = contentOffset + pageWidth
@@ -115,7 +131,7 @@ extension SingleQuizViewController : QuestionViewDelegate {
             time = Date().timeIntervalSince(timeOfStart)
             print(time!)
             let postResultService = PostResultService()
-            postResultService.postResult(quizId: viewModel.quiz!.id!, time: time, numberOfCorrectAnswers: numberOfCorrectAnswers){
+            postResultService.postResult(quizId: Int(viewModel.quiz!.id), time: time, numberOfCorrectAnswers: numberOfCorrectAnswers){
                 (result) in
                 DispatchQueue.main.async {
                     switch result {

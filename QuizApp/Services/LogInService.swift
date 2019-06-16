@@ -10,8 +10,13 @@ import Foundation
 import UIKit
 
 class LogInService {
+    enum LoginResponse {
+        case noInternet
+        case loginFailed
+        case success(token: String)
+    }
     
-    func fetchAccessToken(username : String, password : String, completion: @escaping ((String?) -> Void)){
+    func fetchAccessToken(username : String, password : String, completion: @escaping ((String?) -> Void)) {
         
         let urlString = "https://iosquiz.herokuapp.com/api/session"
         
@@ -60,6 +65,7 @@ class LogInService {
                         let userDefaults = UserDefaults.standard
                         userDefaults.set(accessToken, forKey: "accessToken")
                         userDefaults.set(id, forKey: "id")
+                        userDefaults.set(username, forKey: "username")
                     }
                    // print("acess token je: \(String(describing: accessToken!))")
                     completion(accessToken)

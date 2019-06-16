@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+    <device id="retina6_1" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="SettingsViewController" customModule="QuizApp" customModuleProvider="target">
+            <connections>
+                <outlet property="UsernameLabel" destination="8K9-6e-avJ" id="hN1-Dn-aHo"/>
+                <outlet property="view" destination="i5M-Pr-FkT" id="sfx-zR-JGt"/>
+            </connections>
+        </placeholder>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view clearsContextBeforeDrawing="NO" contentMode="scaleToFill" id="i5M-Pr-FkT">
+            <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontForContentSizeCategory="YES" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8K9-6e-avJ">
+                    <rect key="frame" x="32" y="76" width="350" height="24"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                    <nil key="textColor"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="txT-SN-0eK">
+                    <rect key="frame" x="150" y="132" width="114" height="39"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="22"/>
+                    <state key="normal" title="Sign Out"/>
+                    <connections>
+                        <action selector="SignOutButtonTapped:" destination="-1" eventType="touchUpInside" id="e13-NU-pSf"/>
+                    </connections>
+                </button>
+            </subviews>
+            <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <constraints>
+                <constraint firstItem="8K9-6e-avJ" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" constant="32" id="D2S-hQ-gbp"/>
+                <constraint firstItem="txT-SN-0eK" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="150" id="G82-U7-RWU"/>
+                <constraint firstItem="8K9-6e-avJ" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" constant="32" id="GgC-lK-dgq"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="txT-SN-0eK" secondAttribute="trailing" constant="150" id="Sk6-Bd-VQC"/>
+                <constraint firstItem="8K9-6e-avJ" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="eVZ-bl-ZIj"/>
+                <constraint firstItem="txT-SN-0eK" firstAttribute="top" secondItem="8K9-6e-avJ" secondAttribute="bottom" constant="32" id="kEg-dp-vsF"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="8K9-6e-avJ" secondAttribute="trailing" constant="32" id="kgw-LY-3ZJ"/>
+            </constraints>
+            <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
+            <point key="canvasLocation" x="137.68115942028987" y="107.8125"/>
+        </view>
+    </objects>
+</document>

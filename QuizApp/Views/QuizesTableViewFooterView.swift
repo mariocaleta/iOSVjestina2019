@@ -17,6 +17,7 @@ class QuizesTableViewFooterView: UIView {
         let userDefaults = UserDefaults.standard
         userDefaults.removeObject(forKey: "accessToken")
         userDefaults.removeObject(forKey: "id")
+        userDefaults.removeObject(forKey: "username")
         
         let accessToken = userDefaults.string(forKey: "accessToken")
         let id = userDefaults.string(forKey: "id")
