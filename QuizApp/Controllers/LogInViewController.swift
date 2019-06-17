@@ -38,12 +38,10 @@ class LogInViewController: UIViewController {
                 if accessToken == nil{
                     self.displayMessage(userMessage: "Korisničko ime ili šifra su netočni. Molimo vas pokušajte ponovno.")
                 }else{
-                    //let viewController = QuizesViewController(viewModel: QuizesViewModel())
-                    //let navigationController = UINavigationController(rootViewController: viewController)
-                    //self.present(vc, animated: true, completion: nil)
-                    //self.dismiss(animated: true, completion: nil)
-                    let appDelegate = UIApplication.shared.delegate
-                    appDelegate?.window??.rootViewController = TabBarViewController()
+                    self.animateEverythingOut { _ in
+                        let appDelegate = UIApplication.shared.delegate
+                        appDelegate?.window??.rootViewController = TabBarViewController()
+                    }
                 }
             }
         }
@@ -72,5 +70,98 @@ class LogInViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillChange(notification:)), name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(keyboardWillHide), name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    @objc func keyboardWillHide() {
+        self.view.frame.origin.y = 0
+    }
+    
+    @objc func keyboardWillChange(notification: NSNotification) {
+        
+        if let keyboardSize = (notification.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? NSValue)?.cgRectValue {
+            if (userNameTextField.isFirstResponder || passwordTextField.isFirstResponder) {
+                self.view.frame.origin.y = -keyboardSize.height + 150
+            }
+        }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillChangeFrameNotification, object: nil)
+        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        prepareForAnimating()
+        animateEverythingIn()
+    }
+    
+    private func prepareForAnimating() {
+        userNameTextField.transform = CGAffineTransform(translationX: -view.bounds.width, y: 0)
+        userNameTextField.alpha = 0.0
+        
+        passwordTextField.transform = CGAffineTransform(translationX: -view.bounds.width, y: 0)
+        passwordTextField.alpha = 0.0
+        
+        LogInButton.transform = CGAffineTransform(translationX: -view.bounds.width, y: 0)
+        LogInButton.alpha = 0.0
+        
+        titleLabel.transform = CGAffineTransform(scaleX: 0, y: 0)
+        titleLabel.alpha = 0.0
+    }
+    
+    
+    private func animateEverythingIn() {
+        UIView.animate(withDuration: 0.5, delay: 0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+            self.userNameTextField.transform = CGAffineTransform.identity
+            self.userNameTextField.alpha = 1.0
+        })
+        
+        UIView.animate(withDuration: 0.7, delay: 0.1, options: UIView.AnimationOptions.curveEaseOut, animations: {
+            self.passwordTextField.transform = CGAffineTransform.identity
+            self.passwordTextField.alpha = 1.0
+        })
+        
+        UIView.animate(withDuration: 0.9, delay: 0.2, options: UIView.AnimationOptions.curveEaseOut, animations: {
+            self.LogInButton.transform = CGAffineTransform.identity
+            self.LogInButton.alpha = 1.0
+        })
+        
+        UIView.animate(withDuration: 1.1, delay: 0, options: UIView.AnimationOptions.curveEaseOut, animations: {
+            self.titleLabel.transform = CGAffineTransform.identity
+            self.titleLabel.alpha = 1.0
+        })
+    }
+    
+    private func animateEverythingOut(completion: @escaping (Bool) -> Void) {
+        UIView.animate(withDuration: 0.8, animations: {
+            self.titleLabel.transform = CGAffineTransform(translationX: 0, y: -self.view.bounds.height)
+            self.titleLabel.alpha = 0.0
+        })
+        
+        UIView.animate(withDuration: 0.8, delay: 0.1, animations: {
+            self.userNameTextField.transform = CGAffineTransform(translationX: 0, y: -self.view.bounds.height)
+            self.userNameTextField.alpha = 0.0
+        })
+        
+        UIView.animate(withDuration: 0.8, delay: 0.2, animations: {
+            self.passwordTextField.transform = CGAffineTransform(translationX: 0, y: -self.view.bounds.height)
+            self.passwordTextField.alpha = 0.0
+        })
+        
+        UIView.animate(withDuration: 0.8, delay: 0.3, animations: {
+            self.LogInButton.transform = CGAffineTransform(translationX: 0, y: -self.view.bounds.height)
+            self.LogInButton.alpha = 0.0
+        }, completion: completion)
     }
 }

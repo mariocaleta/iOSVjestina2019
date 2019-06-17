@@ -32,14 +32,14 @@ class QuizesViewModel {
     var sortedQuizes: [[Quiz]] = []
     var helpArray: [Quiz] = []
     var categorys: [String] = []
-    let reachability = Reachability()!
+    var reachability = Reachability()!
     private var isFetched: Bool = false
     
     func fetchQuizes(completion: @escaping (() -> Void))  {
         if(!self.isFetched) {
             self.quizes = DataController.shared.fetchQuiz()
             self.setArray(quiz: (self.quizes)!)
-            reachability.whenReachable = { reachability in
+            if (reachability.connection == .wifi || reachability.connection == .cellular) {
                 QuizService().fetchQuiz { [weak self] (quizes) in
                     self?.quizes = DataController.shared.fetchQuiz()
                     self?.setArray(quiz: (self?.quizes)!)
